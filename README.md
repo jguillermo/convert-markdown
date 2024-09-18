@@ -1,0 +1,1 @@
+copair al portapapeles un markdown y ejecuatr make

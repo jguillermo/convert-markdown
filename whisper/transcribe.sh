@@ -21,12 +21,12 @@ OUTPUT_DIR=$(dirname "$AUDIO_FILE")
 echo "Activando el entorno virtual..."
 source whisperlib/bin/activate
 
-# Ejecutar Whisper para transcribir el archivo de audio
+# Ejecutar Whisper para transcribir el archivo de audio, usando el backend Metal (MPS) en Mac M2
 echo "Transcribiendo el archivo: $AUDIO_FILE"
-whisper "$AUDIO_FILE" --model medium --output_dir "$OUTPUT_DIR"
+whisper "$AUDIO_FILE" --model medium --output_dir "$OUTPUT_DIR" --device cpu
 
 # Desactivar el entorno virtual
 echo "Desactivando el entorno virtual..."
 deactivate
 
-echo "Transcripción completada. Los archivos de salida se encuentran en el directorio actual."
+echo "Transcripción completada. Los archivos de salida se encuentran en el directorio: $OUTPUT_DIR"

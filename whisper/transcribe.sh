@@ -23,7 +23,7 @@ source whisperlib/bin/activate
 
 # Ejecutar Whisper para transcribir el archivo de audio, usando el backend Metal (MPS) en Mac M2
 echo "Transcribiendo el archivo: $AUDIO_FILE"
-whisper "$AUDIO_FILE" --model medium --output_dir "$OUTPUT_DIR" --device cpu
+whisper "$AUDIO_FILE" --model medium --language es --output_dir "$OUTPUT_DIR" --device cpu
 
 # Desactivar el entorno virtual
 echo "Desactivando el entorno virtual..."

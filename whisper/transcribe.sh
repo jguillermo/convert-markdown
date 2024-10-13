@@ -14,13 +14,16 @@ if [ ! -f "$AUDIO_FILE" ]; then
     exit 1
 fi
 
+# Obtener el directorio del archivo de audio
+OUTPUT_DIR=$(dirname "$AUDIO_FILE")
+
 # Activar el entorno virtual en whisperlib
 echo "Activando el entorno virtual..."
 source whisperlib/bin/activate
 
 # Ejecutar Whisper para transcribir el archivo de audio
 echo "Transcribiendo el archivo: $AUDIO_FILE"
-whisper "$AUDIO_FILE" --model medium --output_dir .
+whisper "$AUDIO_FILE" --model medium --output_dir "$OUTPUT_DIR"
 
 # Desactivar el entorno virtual
 echo "Desactivando el entorno virtual..."

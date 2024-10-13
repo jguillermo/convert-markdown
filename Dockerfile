@@ -18,7 +18,7 @@ RUN pip install git+https://github.com/openai/whisper.git
 RUN echo "test" > /app/test_audio.txt
 
 # Ejecutar Whisper con el modelo "large" para descargarlo durante la construcción
-RUN whisper /app/test_audio.txt --model large --language en || true
+RUN whisper /app/test_audio.txt --model medium --language en || true
 
 # Eliminar el archivo de prueba después de descargar el modelo
 RUN rm /app/test_audio.txt
@@ -29,7 +29,7 @@ CMD ["/bin/bash", "-c", "\
         echo 'No se ha especificado la ruta del archivo de audio. Usa la variable de entorno AUDIO_FILE para pasar el archivo.'; \
         exit 1; \
     fi; \
-    whisper \"$AUDIO_FILE\" --model large --output_dir /app --device cpu; \
+    whisper \"$AUDIO_FILE\" --model medium --output_dir /app --device cpu; \
     OUTPUT_FILE_BASE=\"/app/$(basename ${AUDIO_FILE%.*})\"; \
     if [ -f \"${OUTPUT_FILE_BASE}.txt\" ] || [ -f \"${OUTPUT_FILE_BASE}.json\" ]; then \
         echo 'Transcripción completada: $(basename \"$AUDIO_FILE\")'; \

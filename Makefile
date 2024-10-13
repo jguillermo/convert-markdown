@@ -1,4 +1,7 @@
 .DEFAULT_GOAL := all
+##Incluir el Makefile secundario
+include ./whisper/Makefile
+
 ## GENERAL ##
 # Variable para el nombre del archivo temporal
 TEMP_FILE=temp.md
@@ -12,27 +15,6 @@ DESKTOP_DIR = $(HOME)/Desktop
 # Generar un nombre aleatorio para el archivo de salida
 OUT_FILE=$(DESKTOP_DIR)/salida_$(shell openssl rand -hex 3).docx
 
-ifeq ($(firstword $(MAKECMDGOALS)),transcribe)
-  # Verificar si no se ha proporcionado un argumento
-  ifeq ($(strip $(ARG)),)
-    ARG=$(wordlist 2, 2, $(MAKECMDGOALS))
-    ifeq ($(ARG),)
-      $(error Debes proporcionar la ruta del archivo. Uso: make transcribe /ruta/del/archivo/audio.mp3)
-    endif
-  endif
-endif
-
-# Extraer el directorio del archivo de audio
-AUDIO_DIR=$(shell dirname $(ARG))
-
-# Extraer el nombre del archivo (sin el directorio)
-AUDIO_FILE=$(shell basename $(ARG))
-
-# Crear el nombre del archivo de salida, añadiendo un sufijo para evitar conflictos
-OUTPUT_FILE=$(shell echo $(AUDIO_FILE) | sed 's/\(.*\)\..*/\1_output.txt/')
-
-# Asegurar que el argumento no se interprete como un objetivo de Make
-$(eval $(ARG):;@:)
 
 # Tarea por defecto
 all: check_temp_file convert_and_move clean
@@ -47,16 +29,6 @@ check_temp_file:
 install:
 	npm install
 
-build:
-	#docker build --no-cache -t whisper-image-metal .
-	docker build -t whisper-image-metal .
-	docker run --rm -it whisper-image-metal /bin/bash -c "ls -ls /root/.cache/whisper/"
-
-
-transcribe:
-	@echo "Transcribiendo el archivo de audio: $(ARG)"
-	@docker run --rm -v $(AUDIO_DIR):/app -e AUDIO_FILE="/app/$(AUDIO_FILE)" whisper-image-metal
-	@echo "Transcripción completada: $(OUTPUT_FILE)"
 
 # Convertir el archivo temp.md a un archivo de salida con nombre aleatorio
 convert_and_move:
